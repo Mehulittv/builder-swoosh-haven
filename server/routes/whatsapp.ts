@@ -11,7 +11,9 @@ const TEMP_UPLOAD_DIR = path.resolve(process.cwd(), "server", "uploads_tmp");
 const MEDIA_SIGN_KEY = process.env.MEDIA_SIGN_KEY || "dev-secret";
 const MEDIA_TTL_MS = Number(process.env.MEDIA_URL_TTL_MS || 5 * 60 * 1000);
 const MEDIA_PUBLIC_BASE = process.env.MEDIA_PUBLIC_BASE || ""; // e.g. https://your-domain.com
-const DEFAULT_MEDIA_URL = process.env.DEFAULT_MEDIA_URL || "https://dyl347hiwv3ct.cloudfront.net/app/uploads/2023/09/img-favicon.png";
+const DEFAULT_MEDIA_URL =
+  process.env.DEFAULT_MEDIA_URL ||
+  "https://dyl347hiwv3ct.cloudfront.net/app/uploads/2023/09/img-favicon.png";
 
 function ensureTempDir() {
   if (!fs.existsSync(TEMP_UPLOAD_DIR)) {
@@ -167,11 +169,9 @@ whatsappRouter.post("/send", upload.single("file"), async (req, res) => {
 
     res.json({ ok: true, response: result.body });
   } catch (e: any) {
-    res
-      .status(500)
-      .json({
-        error: "Failed to send WhatsApp",
-        detail: e?.message || String(e),
-      });
+    res.status(500).json({
+      error: "Failed to send WhatsApp",
+      detail: e?.message || String(e),
+    });
   }
 });
