@@ -113,7 +113,13 @@ export default function Index() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const j = await resp.json();
+      const text = await resp.text();
+      let j: any = null;
+      try {
+        j = JSON.parse(text || "null");
+      } catch {
+        j = { raw: text };
+      }
       if (!resp.ok) {
         console.error(j);
         toast.error("Failed to send on WhatsApp");
