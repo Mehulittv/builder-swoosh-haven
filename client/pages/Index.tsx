@@ -98,19 +98,20 @@ export default function Index() {
       const roll = summaryQuery.data!.employee.number;
       const message = `${month}-${roll}`;
 
-      const form = new FormData();
-      form.append("endpoint", cfg.endpoint);
-      form.append("appkey", cfg.appkey);
-      form.append("authkey", cfg.authkey);
-      form.append("to", phone);
-      form.append("message", message);
-      if (cfg.templateId) form.append("template_id", cfg.templateId);
-      // Send as data URL for server to generate a temporary public URL
-      form.append("imageDataUrl", dataUrl);
+      const payload: any = {
+        endpoint: cfg.endpoint,
+        appkey: cfg.appkey,
+        authkey: cfg.authkey,
+        to: phone,
+        message,
+        imageDataUrl: dataUrl,
+      };
+      if (cfg.templateId) payload.template_id = cfg.templateId;
 
       const resp = await fetch("/api/whatsapp/send", {
         method: "POST",
-        body: form,
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
       });
       const j = await resp.json();
       if (!resp.ok) {
