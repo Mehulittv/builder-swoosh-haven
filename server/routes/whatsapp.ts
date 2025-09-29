@@ -11,6 +11,7 @@ const TEMP_UPLOAD_DIR = path.resolve(process.cwd(), "server", "uploads_tmp");
 const MEDIA_SIGN_KEY = process.env.MEDIA_SIGN_KEY || "dev-secret";
 const MEDIA_TTL_MS = Number(process.env.MEDIA_URL_TTL_MS || 5 * 60 * 1000);
 const MEDIA_PUBLIC_BASE = process.env.MEDIA_PUBLIC_BASE || ""; // e.g. https://your-domain.com
+const DEFAULT_MEDIA_URL = process.env.DEFAULT_MEDIA_URL || "https://dyl347hiwv3ct.cloudfront.net/app/uploads/2023/09/img-favicon.png";
 
 function ensureTempDir() {
   if (!fs.existsSync(TEMP_UPLOAD_DIR)) {
@@ -132,6 +133,8 @@ whatsappRouter.post("/send", upload.single("file"), async (req, res) => {
       const filename = saveBufferToTemp(buffer, originalName);
       const base = getPublicBase(req);
       tempUrl = `${base}/uploads_tmp/${filename}`;
+    } else {
+      tempUrl = DEFAULT_MEDIA_URL;
     }
 
     const basePayload: any = {
