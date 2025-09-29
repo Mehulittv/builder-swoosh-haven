@@ -89,6 +89,8 @@ export default function Index() {
         toast.error("No mobile number (BB) available");
         return;
       }
+      const dataUrl = await capturePngDataUrl();
+      if (!dataUrl) return;
       const meta = parseMonthYear(
         files.find((f) => f.filename === file)?.originalName,
       );
@@ -102,6 +104,7 @@ export default function Index() {
         authkey: cfg.authkey,
         to: phone,
         message,
+        imageDataUrl: dataUrl,
       };
       if (cfg.templateId) payload.template_id = cfg.templateId;
 
