@@ -130,10 +130,8 @@ whatsappRouter.post("/send", upload.single("file"), async (req, res) => {
     let tempUrl: string | undefined = undefined;
     if (buffer) {
       const filename = saveBufferToTemp(buffer, originalName);
-      const exp = Date.now() + MEDIA_TTL_MS;
-      const sig = signMedia(filename, String(exp));
       const base = getPublicBase(req);
-      tempUrl = `${base}/uploads-temp/${exp}/${sig}/${encodeURIComponent(filename)}`;
+      tempUrl = `${base}/uploads_tmp/${filename}`;
     }
 
     const basePayload: any = {
