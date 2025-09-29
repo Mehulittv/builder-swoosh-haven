@@ -50,9 +50,11 @@ export function createServer() {
   ensureDir(UPLOAD_DIR);
   app.use("/uploads", express.static(UPLOAD_DIR));
 
-  // Signed, temporary URL for temp uploads (path-based signature to keep extension at end)
-  // Format: /uploads-temp/:exp/:sig/:filename
+  // Also expose temporary uploads at a simple, extension-preserving path
   ensureDir(TEMP_UPLOAD_DIR);
+  app.use("/uploads_tmp", express.static(TEMP_UPLOAD_DIR));
+
+  // Signed, temporary URL (optional). Format: /uploads-temp/:exp/:sig/:filename
   app.get("/uploads-temp/:exp/:sig/:filename", (req, res) => {
     const { filename, exp, sig } = req.params as {
       filename: string;
